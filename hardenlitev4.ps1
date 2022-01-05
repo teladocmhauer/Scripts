@@ -116,6 +116,10 @@ If (-NOT (Test-Path $RegistryPath)) {
 # Now set the value
 New-ItemProperty -Path $RegistryPath -Name $Name -Value $Value -PropertyType String -Force 
 
-## Disable USB storage devices for all non admin users
+## Disable USB storage devices for all non admin users. Kaseya places a lite v4 golden GPO backup folder at c:\temp. Restore_Local_Group_Policy.vbs utilizes this backup.
+Set-Location C:\temp
+Unblock-File Restore_Local_Group_Policy.vbs
+.\Restore_Local_Group_Policy.vbs
 
 ## Built-in Guest Account Not Renamed at Windows Target System
+Rename-LocalUser -Name "Guest" -NewName "GuestDisabled"
